@@ -171,7 +171,6 @@
         }
         .form-group {
             margin-bottom: 1rem;
-            position: relative; /* 為了定位眼睛圖示 */
         }
         label {
             display: block;
@@ -228,18 +227,25 @@
             margin-bottom: 0;
             padding-bottom: 0;
         }
-        /* 新增的眼睛圖示樣式 */
+        /* 密碼輸入框包裹器樣式 */
+        .password-wrapper {
+            position: relative;
+        }
+        /* 眼睛圖標樣式 */
         .toggle-password {
             position: absolute;
             right: 10px;
-            top: 60%; /* 調整位置與輸入框對齊 */
+            top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #666;
-            font-size: 1rem;
+            color: #555;
+            font-size: 1.2rem;
         }
-        .toggle-password:hover {
-            color: #333;
+        /* 隱藏原始SVG圖標 */
+        .eye-icon {
+            width: 20px;
+            height: 20px;
+            fill: #555;
         }
     </style>
 </head>
@@ -253,8 +259,21 @@
             </div>
             <div class="form-group">
                 <label for="password">密碼：</label>
-                <input type="password" id="password" required>
-                <span class="toggle-password" onclick="togglePassword()">👁️</span>
+                <div class="password-wrapper">
+                    <input type="password" id="password" required>
+                    <span class="toggle-password" onclick="togglePasswordVisibility()">
+                        <!-- 密碼隱藏時顯示的圖標（帶斜線的眼睛） -->
+                        <svg id="eye-slash" class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                            <line x1="3" y1="3" x2="21" y2="21" stroke="#555" stroke-width="2"/>
+                        </svg>
+                        
+                        <!-- 密碼可見時顯示的圖標（睜開的眼睛） -->
+                        <svg id="eye-open" class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                    </span>
+                </div>
             </div>
             <div id="error" class="error">帳號或密碼錯誤</div>
             <button onclick="verify()">確認</button>
@@ -292,16 +311,20 @@
             }
         }
 
-        // 新增切換密碼顯示功能
-        function togglePassword() {
+        // 切換密碼顯示/隱藏的函數
+        function togglePasswordVisibility() {
             const passwordInput = document.getElementById('password');
-            const toggleIcon = document.querySelector('.toggle-password');
+            const eyeSlashIcon = document.getElementById('eye-slash');
+            const eyeOpenIcon = document.getElementById('eye-open');
+            
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                toggleIcon.textContent = '👁️‍🗨️'; // 切換圖示為「已顯示」
+                eyeSlashIcon.style.display = 'none';
+                eyeOpenIcon.style.display = 'block';
             } else {
                 passwordInput.type = 'password';
-                toggleIcon.textContent = '👁️'; // 切換回「隱藏」
+                eyeSlashIcon.style.display = 'block';
+                eyeOpenIcon.style.display = 'none';
             }
         }
     </script>
